@@ -17,19 +17,24 @@ def run_cmd(cmd):
     os.system(cmd)
 
 
-def add_file_list(file_, nline):
+def _add_file_list(file_, nline):
     with open(file_, 'a') as f:
         f.write(nline + '\n')
 
 
-def read_file(file_):
+def _read_file(file_):
     with open(file_, 'r') as f:
         return f.read()
 
 
+def restart_ss():
+    return run_cmd(cl_dict['ss']['restart'])
+
+
 def read_gfwlist():
-    return read_file(GFW_LIST)
+    return _read_file(GFW_LIST)
 
 
 def add_gfwlist(url):
-    return add_file_list(GFW_LIST, url)
+    _add_file_list(GFW_LIST, url)
+    return restart_ss()
