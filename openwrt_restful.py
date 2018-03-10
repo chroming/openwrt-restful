@@ -1,7 +1,27 @@
+"""
+web api:
+
+/ss/status
+
+get;
+
+put: data: {'status':'start|stop|restart'};
+
+/ss/gfw
+
+get;
+
+post: data: {'url':'google.com'}
+
+detele: data: {'url':'google.com'}
+
+"""
 from flask import Flask, request
 from flask_restplus import Resource, Api
 
 from cl_api import *
+
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -25,7 +45,6 @@ class ShadowSocks(Resource):
         return "run %s success" % cmd
 
 
-
 # ss config
 @api.route('/ss/conf')
 class ShadowSocksConf(Resource):
@@ -46,6 +65,11 @@ class ShadowSocksGfw(Resource):
         url = request.form['url']
         add_gfwlist(url)
         return 'Add %s success' % url
+
+    def delete(self):
+        url = request.form['url']
+        delete_gfw_url(url)
+        return 'Delete %s success' % url
 
 
 if __name__ == '__main__':

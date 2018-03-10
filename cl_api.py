@@ -17,19 +17,37 @@ def run_cmd(cmd):
     os.system(cmd)
 
 
-def add_file_list(file_, nline):
+def _add_file_list(file_, string_):
     with open(file_, 'a') as f:
-        f.write(nline + '\n')
+        f.write(string_ + '\n')
 
 
-def read_file(file_):
+def _remove_line(file_, string_):
+    with open(file_) as fp_in:
+        with open('output.txt', 'w') as fp_out:
+            fp_out.writelines(line for line in fp_in.readlines() if line.rstrip('\n') != string_)
+    os.remove(file_)
+    run_cmd("mv output.txt %s" % file_)
+
+
+def _read_file(file_):
     with open(file_, 'r') as f:
         return f.read()
 
 
+def restart_ss():
+    return run_cmd(cl_dict['ss']['restart'])
+
+
 def read_gfwlist():
-    return read_file(GFW_LIST)
+    return _read_file(GFW_LIST)
 
 
 def add_gfwlist(url):
-    return add_file_list(GFW_LIST, url)
+    _add_file_list(GFW_LIST, url)
+    return restart_ss()
+
+
+def delete_gfw_url(url):
+    _remove_line(GFW_LIST, url)
+    return restart_ss()
